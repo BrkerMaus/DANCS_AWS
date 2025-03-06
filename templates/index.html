@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Inventory Management System</h1>
+            <nav>
+              <ul>
+                  <li><a href="{{ url_for('index') }}" class="active">Home</a></li>
+                  <li><a href="{{ url_for('inventory') }}">Inventory</a></li>
+                  
+                  {% if session.get('logged_in') %}
+                      <li><a href="{{ url_for('logout') }}" class="logout-btn">Logout</a></li>
+                  {% else %}
+                      <li><a href="{{ url_for('login') }}" class="login-btn">Login</a></li>
+                  {% endif %}
+              </ul>
+          </nav>          
+        </header>
+        
+        <main>
+            <section class="hero">
+              <h2>Welcome to the Inventory Management System</h2>
+              <p>Efficiently manage your inventory with our easy-to-use platform.</p>
+              <div class="cta-buttons">
+                  <a href="{{ url_for('inventory') }}" class="btn primary-btn">View Inventory</a>
+                  
+                  {% if not session.get('logged_in') %}
+                      <a href="{{ url_for('login') }}" class="btn secondary-btn">Login</a>
+                  {% endif %}
+              </div>
+            </section>
+            <section class="features">
+                <div class="feature-card">
+                    <h3>Track Items</h3>
+                    <p>Keep track of all your inventory items in one place.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Manage Stock</h3>
+                    <p>Update stock levels and get low stock alerts.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Generate Reports</h3>
+                    <p>Create detailed reports of your inventory status.</p>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>&copy; 2025 Inventory Management System. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
