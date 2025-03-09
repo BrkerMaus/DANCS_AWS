@@ -43,7 +43,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// Apply stock status styles as badges
 function applyStockStatusStyles() {
     document.querySelectorAll(".editable.status").forEach(cell => {
         const statusText = cell.dataset.status || cell.textContent.trim();
@@ -62,7 +61,6 @@ function applyStockStatusStyles() {
     });
 }
 
-// Enable inline editing
 function makeRowEditable(row, button) {
     const cells = row.querySelectorAll("td:not(:last-child)");
 
@@ -76,7 +74,6 @@ function makeRowEditable(row, button) {
         }
     });
 
-    // Convert status cell into a dropdown
     const statusCell = row.querySelector(".editable.status");
     const currentStatus = statusCell.textContent.trim();
     const select = document.createElement("select");
@@ -95,7 +92,6 @@ function makeRowEditable(row, button) {
     button.textContent = "Save";
 }
 
-// Save edited data
 function saveRowData(row, button) {
     const inputs = row.querySelectorAll("input");
     const statusSelect = row.querySelector(".editable.status select");
@@ -138,10 +134,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const addItemBtn = document.getElementById("add-item-btn");
 
     addItemBtn.addEventListener("click", function () {
-        // Create a new row
         const newRow = document.createElement("tr");
 
-        // Add table cells with input fields
         newRow.innerHTML = `
             <td><input type="text" class="item-name" placeholder="Enter Name"></td>
             <td><input type="text" class="item-category" placeholder="Enter Category"></td>
@@ -162,7 +156,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         tableBody.appendChild(newRow);
 
-        // Handle Save button click
         newRow.querySelector(".save-btn").addEventListener("click", function () {
             const name = newRow.querySelector(".item-name").value;
             const category = newRow.querySelector(".item-category").value;
@@ -175,7 +168,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            // Send data to Flask server
             fetch("/add-product", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -190,12 +182,11 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(res => res.json())
             .then(data => {
                 alert(data.message);
-                location.reload(); // Refresh to show updated data
+                location.reload();
             })
             .catch(error => console.error("Error:", error));
         });
 
-        // Handle Cancel button click
         newRow.querySelector(".cancel-btn").addEventListener("click", function () {
             newRow.remove();
         });
