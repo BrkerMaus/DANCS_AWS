@@ -264,8 +264,8 @@ main {
     position: relative;
     text-align: center;
     vertical-align: middle;
-    width: 50px; /* Ensures the same width for all action cells */
-    padding: 0; /* Removes extra spacing */
+    width: 50px;
+    padding: 0;
 }
 
 .dropdown {
