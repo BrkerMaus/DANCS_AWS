@@ -6,6 +6,8 @@ import math
 
 app = Flask(__name__)
 
+app.secret_key = "Bitte arbeiten, danke"
+
 @app.route('/')
 def index():
     return render_template('index.html')
