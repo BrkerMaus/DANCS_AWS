@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Inventory</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Track Inventory</h1>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('inventory') }}">Inventory</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <div class="return-btn-container">
+                <button onclick="window.location.href='{{ url_for('index') }}'" class="btn return-btn">Return to Home</button>
+            </div>
+
+            <h2>Stock Overview</h2>
+            <img src="{{ url_for('static', filename='images/stock_pie_chart.png') }}" alt="Stock Pie Chart" class="chart-image">
+
+            <h2>Price Comparison</h2>
+            <img src="{{ url_for('static', filename='images/price_bar_chart.png') }}" alt="Price Bar Chart" class="chart-image">
+
+            <h2>Quantity Trends</h2>
+            <img src="{{ url_for('static', filename='images/quantity_line_chart.png') }}" alt="Quantity Line Chart" class="chart-image">
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Inventory Management System. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
