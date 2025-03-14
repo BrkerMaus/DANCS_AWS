@@ -4,8 +4,17 @@ def get_products():
     connection = get_products_db_connection()
     cursor = connection.cursor(dictionary=True)
     
-    cursor.execute("SELECT id, name, category, quantity, price, status FROM products")
+    cursor.execute("SELECT id, name, category, quantity, price FROM products")
     products = cursor.fetchall()
+    
+    for product in products:
+        quantity = product["quantity"]
+        if quantity > 20:
+            product["status"] = "Available"
+        elif 0 < quantity <= 20:
+            product["status"] = "Low Stock"
+        else:
+            product["status"] = "Out of Stock"
     
     connection.close()
     return products
@@ -24,10 +33,16 @@ def add_product(name, category, quantity, price, status):
     
     connection.close()
     
-def edit_product(product_id, name, category, quantity, price, status):
+def edit_product(product_id, name, category, quantity, price):
     try:
         connection = get_products_db_connection()
         cursor = connection.cursor()
+        if quantity > 20:
+            status = "Available"
+        elif 0 < quantity <= 20:
+            status = "Low Stock"
+        else:
+            status = "Out of Stock"
 
         query = """
             UPDATE products 
@@ -42,7 +57,6 @@ def edit_product(product_id, name, category, quantity, price, status):
     finally:
         connection.close()
 
-
 def delete_product(product_id):
     """Deletes a product from the database."""
     connection = get_products_db_connection()
@@ -53,4 +67,3 @@ def delete_product(product_id):
     connection.commit()
     
     connection.close()
-
