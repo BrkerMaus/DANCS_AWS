@@ -1,2 +1,7 @@
-flask
+Flask
+matplotlib
 mysql-connector-python
+numpy
+pandas
+scipy
+packaging
