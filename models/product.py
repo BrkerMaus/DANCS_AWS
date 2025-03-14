@@ -20,7 +20,6 @@ def get_products():
     return products
 
 def add_product(name, category, quantity, price, status):
-    """Adds a new product to the database."""
     connection = get_products_db_connection()
     cursor = connection.cursor()
     
@@ -58,7 +57,6 @@ def edit_product(product_id, name, category, quantity, price):
         connection.close()
 
 def delete_product(product_id):
-    """Deletes a product from the database."""
     connection = get_products_db_connection()
     cursor = connection.cursor()
     
