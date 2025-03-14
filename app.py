@@ -33,7 +33,6 @@ def login():
 
     return render_template('login.html', error=error)
 
-
 @app.route('/logout')
 def logout():
     session.pop('logged_in', None)
@@ -86,7 +85,6 @@ def edit_product_route():
     data = request.json
     edit_product(data["id"], data["name"], data["category"], data["quantity"], data["price"])
     return jsonify({"message": "Product updated successfully"})
-
 
 @app.route('/delete-product', methods=['POST'])
 def delete_product_route():
