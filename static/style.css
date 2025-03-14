@@ -265,7 +265,7 @@ main {
     text-align: center;
     vertical-align: middle;
     width: 50px;
-    padding: 0;
+    padding: 0; 
 }
 
 .dropdown {
@@ -371,6 +371,36 @@ footer {
     color: var(--secondary-color);
     margin-top: auto;
 }
+
+.return-btn-container {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.return-btn {
+    padding: 10px 15px;
+    background-color: #3a5a8c;
+    color: white;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.return-btn:hover {
+    background-color: #0056b3;
+}
+
+.chart-image {
+    display: block;
+    max-width: 90%;
+    height: auto;
+    margin: 20px auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 
 @media (max-width: 768px) {
     header {
