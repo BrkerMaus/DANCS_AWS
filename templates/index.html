@@ -23,7 +23,6 @@
               </ul>
           </nav>          
         </header>
-        
         <main>
             <section class="hero">
               <h2>Welcome to the Inventory Management System</h2>
@@ -37,23 +36,22 @@
               </div>
             </section>
             <section class="features">
-                <div class="feature-card">
+                <a href="{{ url_for('track') }}" class="feature-card">
                     <h3>Track Items</h3>
-                    <p>Keep track of all your inventory items in one place.</p>
-                </div>
-                <div class="feature-card">
+                    <p>View stock distribution and trends.</p>
+                </a>                
+                <a href="{{ url_for('inventory') }}" class="feature-card">
                     <h3>Manage Stock</h3>
                     <p>Update stock levels and get low stock alerts.</p>
-                </div>
-                <div class="feature-card">
+                </a>
+                <a href="{{ url_for('inventory') }}" class="feature-card">
                     <h3>Generate Reports</h3>
                     <p>Create detailed reports of your inventory status.</p>
-                </div>
-            </section>
+                </a>
+            </section>            
         </main>
-        
         <footer>
-            <p>&copy; 2025 Inventory Management System. DANCS|CLOUDCOMP.</p>
+            <p>&copy; 2025 Inventory Management System. All rights reserved.</p>
         </footer>
     </div>
 </body>
