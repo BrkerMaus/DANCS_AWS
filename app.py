@@ -1,12 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from models.product import get_products, add_product, edit_product, delete_product
 from models.user import get_users
+from track import generate_charts
 import hashlib
 import math
 
 app = Flask(__name__)
 
-app.secret_key = "Bitte arbeiten, danke"
+app.secret_key = "bitte arbeiten, danke"
 
 @app.route('/')
 def index():
@@ -83,7 +84,7 @@ def add_product_route():
 @app.route("/edit-product", methods=["POST"])
 def edit_product_route():
     data = request.json
-    edit_product(data["id"], data["name"], data["category"], data["quantity"], data["price"], data["status"])
+    edit_product(data["id"], data["name"], data["category"], data["quantity"], data["price"])
     return jsonify({"message": "Product updated successfully"})
 
 
@@ -94,6 +95,15 @@ def delete_product_route():
     
     delete_product(product_id)
     return jsonify({"message": "Product deleted successfully!"})
+
+@app.route('/track')
+def track():
+    if 'logged_in' not in session or not session['logged_in']:
+        flash("Please log in to access this page.")
+        return redirect(url_for('login'))
+    
+    generate_charts() 
+    return render_template('track.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
