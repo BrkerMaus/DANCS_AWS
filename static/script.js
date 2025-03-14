@@ -74,35 +74,18 @@ function makeRowEditable(row, button) {
         }
     });
 
-    const statusCell = row.querySelector(".editable.status");
-    const currentStatus = statusCell.textContent.trim();
-    const select = document.createElement("select");
-
-    ["Available", "Low Stock", "Out of Stock"].forEach(status => {
-        const option = document.createElement("option");
-        option.value = status;
-        option.textContent = status;
-        if (status === currentStatus) option.selected = true;
-        select.appendChild(option);
-    });
-
-    statusCell.innerHTML = "";
-    statusCell.appendChild(select);
-
     button.textContent = "Save";
 }
 
 function saveRowData(row, button) {
     const inputs = row.querySelectorAll("input");
-    const statusSelect = row.querySelector(".editable.status select");
-    
+
     const updatedData = {
         id: row.cells[0].innerText,
         name: inputs[0].value,
         category: inputs[1].value,
-        quantity: inputs[2].value,
-        price: inputs[3].value,
-        status: statusSelect.value
+        quantity: parseInt(inputs[2].value),
+        price: parseFloat(inputs[3].value)
     };
 
     fetch("/edit-product", {
@@ -116,11 +99,8 @@ function saveRowData(row, button) {
             input.parentElement.innerText = input.value;
         });
 
-        const statusCell = row.querySelector(".editable.status");
-        statusCell.dataset.status = updatedData.status;
-        statusCell.innerText = updatedData.status;
+        updateStockStatusUI();
 
-        applyStockStatusStyles();
         button.textContent = "Edit";
     })
     .catch(error => {
@@ -155,7 +135,6 @@ document.addEventListener("DOMContentLoaded", function () {
         `;
 
         tableBody.appendChild(newRow);
-
         newRow.querySelector(".save-btn").addEventListener("click", function () {
             const name = newRow.querySelector(".item-name").value;
             const category = newRow.querySelector(".item-category").value;
@@ -167,7 +146,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 alert("All fields are required!");
                 return;
             }
-
             fetch("/add-product", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -192,3 +170,22 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    updateStockStatusUI();
+});
+
+function updateStockStatusUI() {
+    document.querySelectorAll(".editable.quantity").forEach(cell => {
+        let quantity = parseInt(cell.textContent.trim());
+        let statusCell = cell.parentElement.querySelector(".editable.status");
+
+        if (quantity > 20) {
+            statusCell.innerHTML = '<span class="status-badge in-stock">Available</span>';
+        } else if (quantity > 0) {
+            statusCell.innerHTML = '<span class="status-badge low-stock">Low Stock</span>';
+        } else {
+            statusCell.innerHTML = '<span class="status-badge out-of-stock">Out of Stock</span>';
+        }
+    });
+}
