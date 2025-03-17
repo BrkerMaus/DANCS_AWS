@@ -14,6 +14,27 @@
                 <ul>
                     <li><a href="{{ url_for('index') }}">Home</a></li>
                     <li><a href="{{ url_for('inventory') }}">Inventory</a></li>
+                
+                    {% if session.get('logged_in') %}
+                        <li><a href="{{ url_for('logout') }}" class="logout-btn">Logout</a></li>
+                    {% else %}
+                        <li><a href="{{ url_for('login') }}" class="login-btn">Login</a></li>
+                        <li><a href="{{ url_for('register') }}" class="register-btn">Register</a></li>
+                    {% endif %}
+                
+                    <li class="profile-dropdown">
+                        <div class="profile-icon-container">
+                            <img src="{{ url_for('static', filename='profile-icon.png') }}" class="profile-icon" alt="Profile">
+                            <div class="profile-menu">
+                                <p><strong>{{ session.get('username', 'Guest') }}</strong></p>
+                                <p id="os-info">OS: <span id="os-details">Loading...</span></p>
+                                <p id="browser-info">Browser: Loading...</p>
+                                <p id="ip-info">IP: Loading...</p>
+                                <p id="location-info">Location: Loading...</p>
+                                <p id="process-info">Processor: Loading...</p>
+                            </div>
+                        </div>
+                    </li>
                 </ul>
             </nav>
         </header>
