@@ -19,3 +19,20 @@ def get_products_db_connection():
 
 def get_users_db_connection():
     return mysql.connector.connect(**DB_CONFIG_USERS)
+
+def setup_audit_logs():
+    connection = get_users_db_connection() 
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS audit_logs (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            username VARCHAR(255),
+            action TEXT,
+            timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+    connection.commit()
+    connection.close()
+
+setup_audit_logs()
