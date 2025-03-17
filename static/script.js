@@ -77,6 +77,7 @@ function makeRowEditable(row, button) {
     button.textContent = "Save";
 }
 
+
 function saveRowData(row, button) {
     const inputs = row.querySelectorAll("input");
 
@@ -109,67 +110,74 @@ function saveRowData(row, button) {
     });
 }
 
+
+
 document.addEventListener("DOMContentLoaded", function () {
-    const tableBody = document.getElementById("inventory-table");
     const addItemBtn = document.getElementById("add-item-btn");
+    const modal = document.getElementById("addItemModal");
+    const closeModal = document.querySelector(".close-modal");
+    const saveItemBtn = document.getElementById("save-item-btn");
 
     addItemBtn.addEventListener("click", function () {
-        const newRow = document.createElement("tr");
+        modal.style.display = "flex";
+    });
 
-        newRow.innerHTML = `
-            <td><input type="text" class="item-name" placeholder="Enter Name"></td>
-            <td><input type="text" class="item-category" placeholder="Enter Category"></td>
-            <td><input type="number" class="item-quantity" placeholder="Enter Quantity"></td>
-            <td><input type="number" class="item-price" placeholder="Enter Unit Price"></td>
-            <td>
-                <select class="item-status">
-                    <option value="Available">Available</option>
-                    <option value="Low Stock">Low Stock</option>
-                    <option value="Out of Stock">Out of Stock</option>
-                </select>
-            </td>
-            <td>
-                <button class="save-btn">Save</button>
-                <button class="cancel-btn">Cancel</button>
-            </td>
-        `;
+    closeModal.addEventListener("click", function () {
+        modal.style.display = "none";
+    });
 
-        tableBody.appendChild(newRow);
-        newRow.querySelector(".save-btn").addEventListener("click", function () {
-            const name = newRow.querySelector(".item-name").value;
-            const category = newRow.querySelector(".item-category").value;
-            const quantity = newRow.querySelector(".item-quantity").value;
-            const price = newRow.querySelector(".item-price").value;
-            const status = newRow.querySelector(".item-status").value;
+    window.addEventListener("click", function (event) {
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    });
 
-            if (!name || !category || !quantity || !price) {
-                alert("All fields are required!");
-                return;
-            }
-            fetch("/add-product", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    name: name,
-                    category: category,
-                    quantity: parseInt(quantity),
-                    price: parseFloat(price),
-                    status: status
-                })
+
+    saveItemBtn.addEventListener("click", function () {
+        const nameInput = document.getElementById("item-name");
+        const categoryInput = document.getElementById("item-category");
+        const quantityInput = document.getElementById("item-quantity");
+        const priceInput = document.getElementById("item-price");
+
+        const name = nameInput ? nameInput.value.trim() : "";
+        const category = categoryInput ? categoryInput.value.trim() : "";
+        const quantity = quantityInput ? quantityInput.value.trim() : "";
+        const price = priceInput ? priceInput.value.trim() : "";
+
+        if (!name || !category || !quantity || !price) {
+            alert("All fields are required!");
+            return;
+        }
+
+        fetch("/add-product", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                name: name,
+                category: category,
+                quantity: parseInt(quantity),
+                price: parseFloat(price)
             })
-            .then(res => res.json())
-            .then(data => {
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
                 alert(data.message);
+                modal.style.display = "none";
                 location.reload();
-            })
-            .catch(error => console.error("Error:", error));
-        });
-
-        newRow.querySelector(".cancel-btn").addEventListener("click", function () {
-            newRow.remove();
+            } else {
+                alert("Error: " + data.message);
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("Failed to add item.");
         });
     });
 });
+
+
+
 
 document.addEventListener("DOMContentLoaded", function () {
     updateStockStatusUI();
@@ -189,3 +197,57 @@ function updateStockStatusUI() {
         }
     });
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const profileIcon = document.querySelector(".profile-icon");
+    const profileMenu = document.querySelector(".profile-menu");
+
+    profileIcon.addEventListener("mouseenter", function () {
+        profileMenu.style.display = "block";
+        fetchUserInfo();
+    });
+
+    profileIcon.addEventListener("mouseleave", function () {
+        setTimeout(() => profileMenu.style.display = "none", 3000);
+    });
+
+    function fetchUserInfo() {
+        let osName = "Unknown OS";
+        const userAgent = navigator.userAgent;
+
+        if (userAgent.includes("Windows NT 10.0")) {
+            osName = "Windows 10";
+        } else if (userAgent.includes("Windows NT 11.0") || userAgent.includes("Windows NT 10.0; Win64")) {
+            osName = "Windows 11";
+        } else if (userAgent.includes("Mac OS X")) {
+            osName = "macOS";
+        } else if (userAgent.includes("Linux")) {
+            osName = "Linux";
+        }
+
+        let browserName = "Unknown Browser";
+        if (userAgent.includes("Chrome") && !userAgent.includes("Edg")) {
+            browserName = "Google Chrome";
+        } else if (userAgent.includes("Firefox")) {
+            browserName = "Mozilla Firefox";
+        } else if (userAgent.includes("Safari") && !userAgent.includes("Chrome")) {
+            browserName = "Safari";
+        } else if (userAgent.includes("Edg")) {
+            browserName = "Microsoft Edge";
+        } else if (userAgent.includes("Opera") || userAgent.includes("OPR")) {
+            browserName = "Opera";
+        }
+
+        document.getElementById("os-info").textContent = `OS: ${osName}`;
+        document.getElementById("browser-info").textContent = `Browser: ${browserName}`;
+
+        fetch("/user-info")
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("ip-info").textContent = `IP: ${data.ip}`;
+                document.getElementById("location-info").textContent = `Location: ${data.location}`;
+                document.getElementById("process-info").textContent = `Processor: ${data.processor}`;
+            })
+            .catch(error => console.error("Error fetching user info:", error));
+    }
+});
