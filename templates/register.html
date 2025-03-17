@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Inventory Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Inventory Management System</h1>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('inventory') }}">Inventory</a></li>
+                
+                    {% if session.get('logged_in') %}
+                        <li><a href="{{ url_for('logout') }}" class="logout-btn">Logout</a></li>
+                    {% else %}
+                        <li><a href="{{ url_for('login') }}" class="login-btn">Login</a></li>
+                        <li><a href="{{ url_for('register') }}" class="register-btn">Register</a></li>
+                    {% endif %}
+                
+                    <li class="profile-dropdown">
+                        <div class="profile-icon-container">
+                            <img src="{{ url_for('static', filename='profile-icon.png') }}" class="profile-icon" alt="Profile">
+                            <div class="profile-menu">
+                                <p><strong>{{ session.get('username', 'Guest') }}</strong></p>
+                                <p id="os-info">OS: <span id="os-details">Loading...</span></p>
+                                <p id="browser-info">Browser: Loading...</p>
+                                <p id="ip-info">IP: Loading...</p>
+                                <p id="location-info">Location: Loading...</p>
+                                <p id="process-info">Processor: Loading...</p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </nav>          
+        </header>
+
+        <main>
+            <section class="register-section">
+                <div class="form-container">
+                    <h2>Create an Account</h2>
+                    <form action="{{ url_for('register') }}" method="POST">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" required>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn primary-btn">Register</button>
+                        </div>
+                    </form>
+                    <div class="form-help">
+                        <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+                    </div>
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            <div class="flash-messages">
+                                {% for category, message in messages[-1:] %}  {# Show only the latest message #}
+                                    <div class="alert {{ category }}">{{ message }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                </div>
+            </section>
+        </main>        
+
+        <footer>
+            <p>&copy; 2025 Inventory Management System. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
