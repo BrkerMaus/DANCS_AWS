@@ -11,12 +11,14 @@ if not os.path.exists(IMAGE_DIR):
     os.makedirs(IMAGE_DIR)
 
 def clean_old_images():
+    """Deletes existing images in the directory before generating new ones."""
     for file in os.listdir(IMAGE_DIR):
         file_path = os.path.join(IMAGE_DIR, file)
         if os.path.isfile(file_path):
             os.remove(file_path)
 
 def generate_charts():
+    """Generates Pie Chart, Bar Graph, and Line Graph for inventory data."""
     products = get_products()
     custom_colors = ["#28a745", "#ffc107", "#dc3545"]
 
