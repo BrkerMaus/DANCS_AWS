@@ -17,7 +17,6 @@ def index():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    """User registration with username validation."""
     if request.method == 'POST':
         username = request.form['username'].strip()
         password = request.form['password'].strip()
